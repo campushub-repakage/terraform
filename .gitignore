@@ -1,0 +1,30 @@
+# Terraform state
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Terraform lock file (Terraform Cloud 사용 시 불필요)
+.terraform.lock.hcl
+
+# Log files
+*.log
+
+# Crash log
+crash.log
+
+# Sensitive override files (Terraform Cloud 환경 변수 사용)
+*.tfvars
+*.tfvars.json
+
+# Local .terraform directories inside modules too
+modules/**/.terraform/
+
+# VS Code specific
+.vscode/
+
+# macOS, Windows system files
+.DS_Store
+Thumbs.db
+
+cluster/
+manifest/
