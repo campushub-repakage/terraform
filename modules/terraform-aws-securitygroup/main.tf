@@ -3,15 +3,15 @@ resource "aws_security_group" "campushub" {
   description = var.description
   vpc_id      = var.vpc_id
 
-  # 인바운드 규칙을 직접 정의 (중복 자동 제거)
+  # 인바운드 규칙을 직접 정의
   dynamic "ingress" {
-    for_each = { for rule in var.ingress_rules : "${rule.from_port}-${rule.to_port}-${rule.protocol}" => rule... }
+    for_each = { for i, r in var.ingress_rules : i => r }
     content {
-      description = ingress.value[0].description
-      from_port   = ingress.value[0].from_port
-      to_port     = ingress.value[0].to_port
-      protocol    = ingress.value[0].protocol
-      cidr_blocks = distinct(flatten([for r in ingress.value : r.cidr_blocks]))
+      description = ingress.value.description
+      from_port   = ingress.value.from_port
+      to_port     = ingress.value.to_port
+      protocol    = ingress.value.protocol
+      cidr_blocks = ingress.value.cidr_blocks
     }
   }
 
