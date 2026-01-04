@@ -41,9 +41,7 @@ module "campus-hub-git-role" {
 		}
 	]
   })
-  managed_policy_arns = [
-    aws_iam_policy.campus-hub-git-actions-policy.arn
-  ]
+  managed_policy_arns = [ module.campushub_policies.arns["campushub-git-actions-policy"] ]
 }
 
 # campushub-eso-role
@@ -71,9 +69,7 @@ module "campushub-eso-role" {
 		}
 	]
   })
-  managed_policy_arns = [
-    aws_iam_policy.campushub-eso-policy.arn
-  ]
+  managed_policy_arns = [ module.campushub_policies.arns["campushub-eso-policy"] ]
 }
 
 # campushub-IRSA-class-role
@@ -102,9 +98,7 @@ module "campushub-IRSA-class-role" {
 		}
 	]
   })
-  managed_policy_arns = [
-    aws_iam_policy.campushub-class-role.arn
-  ]
+  managed_policy_arns = [ module.campushub_policies.arns["campushub-class-policy"]]
 }
 
 # campushub-IRSA-user-auth-role
@@ -134,9 +128,7 @@ module "campushub-IRSA-user-auth-role" {
 		}
 	]
   })
-  managed_policy_arns = [
-    aws_iam_policy.campushub-IRSA-user-auth-policy.arn
-  ]
+  managed_policy_arns = [ module.campushub_policies.arns["campushub-user-auth-policy"] ]
 }
 
 # campushub-monitoring-role
@@ -162,9 +154,7 @@ module "campushub-monitoring-role" {
 		}
 	]
   })
-  managed_policy_arns = [
-    aws_iam_policy.campushub-monitoring-policy.arn
-  ]
+  managed_policy_arns = [ module.campushub_policies.arns["campushub-monitoring-policy"] ]
 }
 
 # campushub-IRSA-lbc-role
@@ -189,9 +179,7 @@ module "campushub-IRSA-lbc-role" {
 		}
 	]
   })
-  managed_policy_arns = [
-    aws_iam_policy.campushub-IRSA-lbc-policy.arn
-  ]
+  managed_policy_arns = [ module.campushub_policies.arns["campushub-irsa-lbc-policy"] ]
 }
 
 # campushub-karpenterController-role
@@ -217,9 +205,7 @@ module "campushub-karpenterController-role" {
 		}
 	]
   })
-  managed_policy_arns = [
-    aws_iam_policy.campushub-karpenterController-policy.arn
-  ]
+  managed_policy_arns = [ module.campushub_policies.arns["campushub-karpentercontroller-policy"] ]
 }
 
 # campushub-karpenterNode-role
@@ -239,7 +225,7 @@ module "campushub-karpenterNode-role" {
 	]
   })
   managed_policy_arns = [
-    aws_iam_policy.campushub-karpenterNode-policy.arn,
+    module.campushub_policies.arns["campushub-karpenterNode-policy"],
     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
     "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
@@ -267,9 +253,7 @@ module "external_dns_role" {
       }
     }]
   })
-  managed_policy_arns = [
-    aws_iam_policy.campushub-external-dns-policy.arn
-  ]
+  managed_policy_arns = [ module.campushub_policies.arns["campushub-external-dns-policy"] ]
 }
 
 # EBS CSI Driver Role
@@ -292,9 +276,7 @@ module "campushub-IRSA-ebs-csi-role" {
       }
     }]
   })
-  managed_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
-  ]
+  managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"]
 }
 
 # Lambda 함수용 IAM 역할
@@ -323,7 +305,7 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
 
 # Lambda 커스텀 정책 연결
 resource "aws_iam_role_policy_attachment" "lambda_custom_policy" {
-  policy_arn = aws_iam_policy.campushub-lambda-policy.arn
+  policy_arn = module.campushub_policies.arns["campushub-lambda-policy"]
   role       = aws_iam_role.campushub_lambda_role.name
 }
 
