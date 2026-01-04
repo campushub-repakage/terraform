@@ -7,3 +7,15 @@ variable "name_prefix" {
   description = "이름에 사용할 prefix"
   type        = string
 }
+
+variable "vpc_id" { 
+  type = string 
+}
+
+variable "public_subnet_ids" {
+   type = string 
+}
+
+variable "private_subnet_ids" {
+   type = string
+}
