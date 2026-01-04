@@ -1,6 +1,6 @@
 # EKS Cluster Role
 module "eks_cluster_role" {
-  source = "./modules/terraform-aws-iam-role"
+  source = "./modules/terraform-aws-role"
   role_name = "campushub-eks-cluster-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -19,7 +19,7 @@ module "eks_cluster_role" {
 
 # campus-hub-git-role
 module "campus-hub-git-role" {
-  source = "./modules/terraform-aws-iam-role"
+  source = "./modules/terraform-aws-role"
   role_name = "campus-hub-git-role"
   assume_role_policy = jsonencode({
 	"Version": "2012-10-17",
@@ -48,7 +48,7 @@ module "campus-hub-git-role" {
 
 # campushub-eso-role
 module "campushub-eso-role" {
-  source = "./modules/terraform-aws-iam-role"
+  source = "./modules/terraform-aws-role"
   role_name = "campushub-eso-role"
   assume_role_policy = jsonencode({
 	"Version": "2012-10-17",
@@ -78,7 +78,7 @@ module "campushub-eso-role" {
 
 # campushub-IRSA-class-role
 module "campushub-IRSA-class-role" {
-  source = "./modules/terraform-aws-iam-role"
+  source = "./modules/terraform-aws-role"
   role_name = "campushub-IRSA-class-role"
   assume_role_policy = jsonencode({
 	"Version": "2012-10-17",
@@ -109,7 +109,7 @@ module "campushub-IRSA-class-role" {
 
 # campushub-IRSA-user-auth-role
 module "campushub-IRSA-user-auth-role" {
-  source = "./modules/terraform-aws-iam-role"
+  source = "./modules/terraform-aws-role"
   role_name = "campushub-IRSA-user-auth-role"
   assume_role_policy = jsonencode({
 	"Version": "2012-10-17",
@@ -141,7 +141,7 @@ module "campushub-IRSA-user-auth-role" {
 
 # campushub-monitoring-role
 module "campushub-monitoring-role" {
-  source = "./modules/terraform-aws-iam-role"
+  source = "./modules/terraform-aws-role"
   role_name = "campushub-monitoring-role"
   assume_role_policy = jsonencode({
 	"Version": "2012-10-17",
@@ -169,7 +169,7 @@ module "campushub-monitoring-role" {
 
 # campushub-IRSA-lbc-role
 module "campushub-IRSA-lbc-role" {
-  source = "./modules/terraform-aws-iam-role"
+  source = "./modules/terraform-aws-role"
   role_name = "campushub-IRSA-lbc-role"
   assume_role_policy = jsonencode({
 	"Version": "2012-10-17",
@@ -196,7 +196,7 @@ module "campushub-IRSA-lbc-role" {
 
 # campushub-karpenterController-role
 module "campushub-karpenterController-role" {
-  source = "./modules/terraform-aws-iam-role"
+  source = "./modules/terraform-aws-role"
   role_name = "campushub-karpenterController-role"
   assume_role_policy = jsonencode({
 	"Version": "2012-10-17",
@@ -224,7 +224,7 @@ module "campushub-karpenterController-role" {
 
 # campushub-karpenterNode-role
 module "campushub-karpenterNode-role" {
-  source = "./modules/terraform-aws-iam-role"
+  source = "./modules/terraform-aws-role"
   role_name = "campushub-karpenterNode-role"
   assume_role_policy = jsonencode({
 	"Version": "2012-10-17",
@@ -249,7 +249,7 @@ module "campushub-karpenterNode-role" {
 
 # External DNS Role
 module "external_dns_role" {
-  source = "./modules/terraform-aws-iam-role"
+  source = "./modules/terraform-aws-role"
   role_name = "campushub-external-dns-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -274,7 +274,7 @@ module "external_dns_role" {
 
 # EBS CSI Driver Role
 module "campushub-IRSA-ebs-csi-role" {
-  source = "./modules/terraform-aws-iam-role"
+  source = "./modules/terraform-aws-role"
   role_name = "campushub-IRSA-ebs-csi-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
