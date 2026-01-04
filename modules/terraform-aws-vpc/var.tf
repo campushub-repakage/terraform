@@ -31,3 +31,8 @@ variable "private_subnet_config" {
     az         = string
   }))
 }
+
+variable "nat_eip_id" {
+  description = "NAT Gateway용 EIP의 ID"
+  type        = string
+}

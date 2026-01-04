@@ -3,10 +3,11 @@ resource "aws_eip" "nat" {
 }
 
 module "vpc" {
-  source             = "./modules/terraform-aws-vpc"
-  name_prefix        = "campushub"
-  vpc_cidr           = "10.0.0.0/16"
-  cluster_name       = var.cluster_name
+  source      = "./modules/terraform-aws-vpc"
+  name_prefix = "campushub"
+  vpc_cidr    = "10.0.0.0/16"
+  nat_eip_id  = aws_eip.nat.id
+  cluster_name = var.cluster_name
   availability_zones = var.availability_zones
 
   public_subnet_config = {
@@ -20,13 +21,4 @@ module "vpc" {
     "private-c-1" = { cidr_block = "10.0.13.0/24", az = var.availability_zones[1] }
     "private-c-2" = { cidr_block = "10.0.23.0/24", az = var.availability_zones[1] }
   }
-}
-
-module "network" {
-  source     = "./modules/terraform-aws-network"
-  name_prefix = "campushub"
-  vpc_id     = module.vpc.vpc_id
-  nat_eip_id = aws_eip.nat.id
-  public_subnet_ids = module.vpc.public_subnet_ids
-  private_subnet_ids = module.vpc.private_subnet_ids
 }
