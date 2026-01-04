@@ -4,12 +4,6 @@ locals {
 }
 
 # Bastion 서브넷 정보는 더 이상 필요하지 않음 (루트 볼륨 사용)
-
-# 기존 키페어 사용
-locals {
-  key_pair_name = var.key_pair_name
-}
-
 # 보안그룹 생성
 resource "aws_security_group" "campushub-sg-bastion" {
   name        = "campushub-sg-bastion"

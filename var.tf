@@ -76,12 +76,6 @@ variable "enable_karpenter_resources" {
   default     = true
 }
 
-variable "key_pair_name" {
-  description = "사용할 키페어 이름"
-  type        = string
-  default     = "campushub-key"
-}
-
 # 프로젝트 및 리소스 이름 설정
 variable "project_name" {
   description = "Project name used for resource naming"

@@ -1,15 +1,3 @@
-# Bastion 호스트 정보
-output "bastion_host" {
-  description = "Bastion 호스트 접속 정보"
-  value = {
-    public_ip = aws_eip.bastion_ip.public_ip
-    ssh_command = "ssh -i ~/.ssh/${var.key_pair_name}.pem ec2-user@${aws_eip.bastion_ip.public_ip}"
-    user = "ec2-user"
-    key_name = var.key_pair_name
-    key_file = "~/.ssh/${var.key_pair_name}.pem"
-  }
-}
-
 # 공개 도메인 정보
 output "domain_info" {
   description = "도메인 설정 정보"
