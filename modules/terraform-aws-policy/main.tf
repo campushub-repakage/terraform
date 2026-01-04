@@ -4,6 +4,6 @@ resource "aws_iam_policy" "this" {
   name        = each.value.name
   description = try(each.value.description, null)
   path        = try(each.value.path, null)
-  policy      = jsonencode(each.value.policy_json)
+  policy      = each.value.policy_json
   tags        = try(each.value.tags, null)
 }

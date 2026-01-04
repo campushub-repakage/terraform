@@ -6,7 +6,7 @@ module "campushub_policies" {
     # campushub-class-policy
     class_policy = {
       name = "campushub-class-policy"
-      policy_json = {
+      policy_json = jsonencode({
         Version = "2012-10-17"
         Statement = [
           {
@@ -84,13 +84,13 @@ module "campushub_policies" {
             ]
           }
         ]
-      }
+      })
     }
 
     # campushub-eso-policy
     eso_policy = {
       name = "campushub-eso-policy"
-      policy_json = {
+      policy_json = jsonencode({
         Version = "2012-10-17"
         Statement = [
           {
@@ -115,13 +115,13 @@ module "campushub_policies" {
             }
           }
         ]
-      }
+      })
     }
 
     # campushub-external-dns-policy
     external_dns_policy = {
       name = "campushub-external-dns-policy"
-      policy_json = {
+      policy_json = jsonencode({
         Version = "2012-10-17"
         Statement = [
         {
@@ -142,13 +142,13 @@ module "campushub_policies" {
             Resource = "*"
         }
         ]
-    }
+    })
     }
 
     # campushub-IRSA-lbc-policy
     irsa_lbc_policy = {
       name = "campushub-irsa-lbc-policy"
-      policy_json = {
+      policy_json = jsonencode({
         Version = "2012-10-17"
         Statement = [
         {
@@ -266,12 +266,13 @@ module "campushub_policies" {
         "Resource": "*"
         }
     ]
+    })
     }
 
     # campushub-IRSA-user-auth-policy
     user_auth_policy = {
       name = "campushub-user-auth-policy"
-      policy_json = {
+      policy_json = jsonencode({
         Version = "2012-10-17"
         Statement: [
             {
@@ -315,13 +316,13 @@ module "campushub_policies" {
             "Resource": "*"
             }
         ]
-        }
+        })
     }
 
     # campushub-karpenterNode-policy
     karpenter_policy = {
       name = "campushub-karpenterNode-policy"
-      policy_json = {
+      policy_json = jsonencode({
         Version = "2012-10-17"
         Statement : [
         {
@@ -468,13 +469,13 @@ module "campushub_policies" {
             "Resource" : "*"
         }
         ]
-    }
+    })
     }
 
     # campushub-karpentercontroller-policy
     karpenterController_policy = {
       name = "campushub-karpentercontroller-policy"
-      policy_json = {
+      policy_json = jsonencode({
         Version = "2012-10-17"
         Statement: [
             {
@@ -735,13 +736,13 @@ module "campushub_policies" {
                 "Action": "eks:DescribeCluster"
             }
         ]
-    }
+    })
     }
 
     # campushub-monitoring-policy
     monitoring_policy = {
       name = "campushub-monitoring-policy"
-      policy_json = {
+      policy_json = jsonencode({
         Version = "2012-10-17"
         Statement: [
             {
@@ -765,13 +766,13 @@ module "campushub_policies" {
                 ]
             }
         ]
-    }
+    })
     }
 
     # campushub-lambda-policy - Aurora DB 작업용 최소 권한
     lambda_policy = {
       name = "campushub-lambda-policy"
-      policy_json = {
+      policy_json = jsonencode({
         Version = "2012-10-17"
         Statement = [
         {
@@ -823,13 +824,13 @@ module "campushub_policies" {
             Resource = "*"
         }
         ]
-    }
+    })
     }
 
     # campushub-git-actions-policy
     git_actions_policy = {
       name = "campushub-git-actions-policy"
-      policy_json = {
+      policy_json = jsonencode({
         Version = "2012-10-17"
         Statement = [
         {
@@ -870,10 +871,7 @@ module "campushub_policies" {
             Resource = "arn:aws:iam::${var.aws_account_id}:role/${var.kubernetes_namespace}-*"
         }
         ]
+    })
     }
-    }
-
-
   }
-}
 }

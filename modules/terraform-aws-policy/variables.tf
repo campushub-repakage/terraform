@@ -5,6 +5,6 @@ variable "policies" {
     description = optional(string)
     path        = optional(string)
     tags        = optional(map(string))
-    policy_json = any
+    policy_json = string
   }))
 }
