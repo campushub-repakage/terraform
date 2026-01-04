@@ -17,14 +17,6 @@ resource "aws_security_group" "campushub-sg-bastion" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    description = "allow SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
     description = "allow HTTP"
     from_port   = 80
     to_port     = 80
@@ -36,22 +28,6 @@ resource "aws_security_group" "campushub-sg-bastion" {
     description = "allow HTTPS"
     from_port   = 443
     to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "allow ICMP"
-    from_port   = -1
-    to_port     = -1
-    protocol    = "icmp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "allow custom app ports 8000-9000"
-    from_port   = 8000
-    to_port     = 9000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -105,6 +81,12 @@ resource "aws_iam_role" "campushub-bastion-role" {
   })
 }
 
+# SSM Managed Instance Core 정책 연결
+resource "aws_iam_role_policy_attachment" "bastion_ssm_core" {
+  role       = aws_iam_role.campushub-bastion-role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
 # AWS 관리형 정책 연결 - EKS 클러스터 관리
 resource "aws_iam_role_policy_attachment" "campushub-bastion-eks-cluster-policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
@@ -127,34 +109,6 @@ resource "aws_iam_role_policy_attachment" "campushub-bastion-rds-readonly" {
 resource "aws_iam_role_policy_attachment" "bastion_ssm_getparam" {
   role       = aws_iam_role.campushub-bastion-role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
-}
-
-# Secrets Manager 및 KMS(Decrypt) 읽기 권한 부여 (RDS 마스터 비밀번호 조회용)
-resource "aws_iam_role_policy" "bastion_secrets_kms_read" {
-  name = "bastion-secrets-kms-read"
-  role = aws_iam_role.campushub-bastion-role.id
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect   = "Allow",
-        Action   = [
-          "secretsmanager:GetSecretValue",
-          "secretsmanager:DescribeSecret",
-          "secretsmanager:ListSecrets"
-        ],
-        Resource = "*"
-      },
-      {
-        Effect   = "Allow",
-        Action   = [
-          "kms:Decrypt"
-        ],
-        Resource = "*"
-      }
-    ]
-  })
 }
 
 # 커스텀 정책 - 필수 권한들
@@ -205,7 +159,6 @@ resource "aws_instance" "campushub-ec2-bastion" {
     data.aws_security_group.default.id
   ]
   subnet_id = local.bastion_subnet_id
-  key_name                    = local.key_pair_name
 
   # 루트 볼륨 설정 (20GB)
   root_block_device {
@@ -229,32 +182,22 @@ resource "aws_instance" "campushub-ec2-bastion" {
     #!/bin/bash
     yum update -y
     
-    # AWS CLI v2 설치 (이미 설치됨)
-    # curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-    # unzip awscliv2.zip
-    # sudo ./aws/install
-    
     # kubectl 설치
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
     chmod +x kubectl
     sudo mv kubectl /usr/local/bin/
     
-    # Git 설치 (이미 설치됨)
-    # yum install -y git
-    
     # kubeconfig 설정 (EKS 클러스터 연결)
     aws eks update-kubeconfig --region ${var.region} --name ${var.cluster_name}
-    
-    echo "Bastion host setup complete with kubectl, AWS CLI, and 20GB EBS volume mounted at /mnt/ebs"
     EOF
 
-  tags = {
-    Name = "bastion-ec2"
-  }
+  tags = { Name = "bastion-ec2" }
 
   depends_on = [
     module.vpc,
-    aws_iam_instance_profile.campushub-bastion-profile
+    aws_iam_instance_profile.campushub-bastion-profile,
+    aws_iam_role_policy_attachment.bastion_ssm_core
+
   ]
 
   # On-Demand 인스턴스로 강제 교체
@@ -262,14 +205,3 @@ resource "aws_instance" "campushub-ec2-bastion" {
     create_before_destroy = true
   }
 }
-
-# EIP 할당
-resource "aws_eip" "bastion_ip" {
-  instance = aws_instance.campushub-ec2-bastion.id
-
-  tags = {
-    "Name" = "bastion_eip"
-  }
-}
-
-# Basion IP 주소 출력
