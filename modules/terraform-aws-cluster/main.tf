@@ -8,8 +8,8 @@ resource "aws_eks_cluster" "campushub" {
   version  = var.cluster_version
 
   access_config {
-    authentication_mode                         = "API_AND_CONFIG_MAP"
-    bootstrap_cluster_creator_admin_permissions = true
+    authentication_mode = "API_AND_CONFIG_MAP" # eks 접근방식 configmap/iam 둘다 허용
+    bootstrap_cluster_creator_admin_permissions = true # 클러스터 처음 접근 가능
   }
 
   vpc_config {
